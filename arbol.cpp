@@ -64,19 +64,18 @@ void istNodo(int x, Nodo *&arbol)
 {
 	if (arbol==NULL)
 	{
-		
-		arbol = crearArbol(x); //Si arbol est· vacÌo se llama a crearArbol y se guarda en arbol el primero nodo
+		arbol = crearArbol(x); //Si arbol est√° vac√≠o se llama a crearArbol y se guarda en arbol el primero nodo
 	}
 	else 
 	{
-		int valorR = arbol->valor;//Se obtiene el valor de la raÌz
+		int valorR = arbol->valor;//Se obtiene el valor de la ra√≠z
 		if (x < valorR)
 		{
-			istNodo(x, arbol->izquierdo);//Si el valor dado es menor al nodo raÌz se inserta a la izquierda
+			istNodo(x, arbol->izquierdo);//Si el valor dado es menor al nodo ra√≠z se inserta a la izquierda
 		}
 		else if (x > valorR)
 		{
-			istNodo(x, arbol->derecho);//Si el valor dado es mayor al nodo raÌz se inserta a la derecha
+			istNodo(x, arbol->derecho);//Si el valor dado es mayor al nodo ra√≠z se inserta a la derecha
 		}
 		
 		
@@ -122,23 +121,61 @@ bool buscar(int x, Nodo *arbol)
 		return buscar(x, arbol->izquierdo);
 	}	
 }
+void menuR()
+{
+	setlocale(LC_ALL,"Spanish");
+	SetConsoleCP(1252);
+	SetConsoleOutputCP(1252);
+	int op; 
+	bool repetir = true;
+	do
+	{
+		const char *titulo = "RECORRIDOS"; 
+		const char *opciones[] = {"Preorden", "Inorden", "Postorden", "Salir"};
+		op = menu(titulo, opciones, 4);
+		system("cls");
+		switch(op)
+		{
+			case 1:
+			{
+				
+				break;
+			}
+			case 2:
+			{
+				break;
+			}
+			case 3:
+			{
+				break;
+			}
+			case 4:
+			{
+				repetir = false;
+				break;
+			}
+		}
+	}while(repetir);
+	
+}
 
 int main(int argc, char** argv)
 {
 	setlocale(LC_ALL,"Spanish");
 	SetConsoleCP(1252);
 	SetConsoleOutputCP(1252);
+	system("color 71");
 	gotoxy(40,13); cout << "BIENVENIDO. NAVEGUE CON W S"<<endl<<endl<<endl;
 	system("pause");
 	system("cls");
-	bool repite1 =true; 
+	bool repite1 = true; 
 	int cnt = 0;
 	do
 	{
-		int opcion; 
+		int opcion;		
 		const char *titulo = "EJERCICIOS CON ARBOLES"; 
-		const char *opciones[] = {"Crear ·rbol", "Insertar nodo", "Mostrar", "Buscar valor", "Salir"};
-		opcion = menu(titulo, opciones, 5);
+		const char *opciones[] = {"Crear √°rbol", "Insertar nodo", "Mostrar", "Buscar valor", "Altura del nodo", "Altura del √°rbol", "Cantidad de Nodos en el √°rbol", "Recorrer √°rbol", "Borrar un nodo", "Borre todo el √°rbol", "Salir"};
+		opcion = menu(titulo, opciones, 11);
 		system("cls");
 		switch(opcion)
 		{
@@ -147,13 +184,13 @@ int main(int argc, char** argv)
 				int numero;
 				if(Arbol != NULL)
 				{
-					gotoxy(40,12);cout << " <= YA EXISTE UN ¡RBOL => " << endl;
+					gotoxy(40,12);cout << " <= YA EXISTE UN √ÅRBOL => " << endl;
 					system("pause");
 				}
 				else
 				{
-					gotoxy(45, 1);cout << "¡RBOL VACÕO  ";
-					gotoxy(40, 3);cout << "DAME EL N⁄MERO ENTERO =>  "; 
+					gotoxy(45, 1);cout << "√ÅRBOL VAC√çO  ";
+					gotoxy(40, 3);cout << "DAME EL N√öMERO ENTERO =>  "; 
 					cin >> numero;
 					istNodo(numero, Arbol);
 					system("cls");
@@ -167,9 +204,9 @@ int main(int argc, char** argv)
 				int numero;
 				if (Arbol == NULL)
 				{
-					gotoxy(45, 1);cout << "¡RBOL VACÕO  ";
+					gotoxy(45, 1);cout << "√ÅRBOL VAC√çO  ";
 				}
-				gotoxy(40, 3);cout << "DAME EL N⁄MERO ENTERO =>  "; 
+				gotoxy(40, 3);cout << "DAME EL N√öMERO ENTERO =>  "; 
 				cin >> numero;
 				istNodo(numero, Arbol);
 				system("cls");
@@ -179,37 +216,43 @@ int main(int argc, char** argv)
 			}
 			case 3:
 			{
-				gotoxy(20, 3); cout << "LA RAÕZ DEL ¡RBOL SE MOSTRAR¡ A LA IZQUIERDA Y SE SEGUIR¡ LA L”GICA HACIA LA DERECHA"<< endl << endl; 
-				system("pause");
-				system("cls"); 
-				gotoxy(40, 3); cout << "MOSTRANDO ¡RBOL..."<< endl << endl;  
 				if (Arbol == NULL)
 				{
-					gotoxy(45, 1);cout << "¡RBOL VACÕO  ";
+					gotoxy(45, 1);cout << "√ÅRBOL VAC√çO  "<<endl<<endl;
+					system("pause");
 				}
-				mostrar(cnt, Arbol);
-				system("pause");
-				break;
+				else
+				{
+					gotoxy(20, 3); cout << "LA RA√çZ DEL √ÅRBOL SE MOSTRAR√Å A LA IZQUIERDA Y SE SEGUIR√Å LA L√ìGICA HACIA LA DERECHA"<< endl << endl; 
+					system("pause");
+					system("cls"); 
+					gotoxy(40, 3); cout << "MOSTRANDO √ÅRBOL..."<< endl << endl;  
+					
+					mostrar(cnt, Arbol);
+					system("pause");
+
+				}
+			break;
 			}
 			case 4:
 			{
 				int numero;
 				if (Arbol == NULL)
 				{
-					gotoxy(40,6);cout << " <= EL ¡RBOL EST¡ VACÕO => " << endl;
+					gotoxy(40,6);cout << " <= EL √ÅRBOL EST√Å VAC√çO => " << endl;
 					system("pause");
 				}
 				else
 				{
-					gotoxy(40, 3);cout << "DAME EL N⁄MERO ENTERO A BUSCAR=>  "; 
+					gotoxy(40, 3);cout << "DAME EL N√öMERO ENTERO A BUSCAR=>  "; 
 					cin >> numero;
 					if(buscar(numero, Arbol) == true)
 					{
-						gotoxy(35, 5);cout << " <= EL N⁄MERO " << numero << " EXISTE EN EL ¡RBOL =>  "; 
+						gotoxy(35, 5);cout << " <= EL N√öMERO " << numero << " EXISTE EN EL √ÅRBOL =>  "; 
 					}
 					else if(buscar(numero, Arbol) == false)
 					{
-						gotoxy(35, 5);cout << " <= EL N⁄MERO " << numero <<  " NO EXISTE EN EL ¡RBOL =>  "; 
+						gotoxy(35, 5);cout << " <= EL N√öMERO " << numero <<  " NO EXISTE EN EL √ÅRBOL =>  "; 
 					}
 					cout << endl << endl; 
 					system("pause");
@@ -219,13 +262,37 @@ int main(int argc, char** argv)
 			}
 			case 5: 
 			{
-				repite1 = false; 
+				break;
+			}
+			case 6:
+			{
+				break;
+			}
+			case 7:
+			{
+				break;
+			}
+			case 8:
+			{
+				menuR();
+				break;
+			}
+			case 9:
+			{
+				break;
+			}
+			case 10:
+			{
+				break;
+			}
+			case 11:
+			{
+				repite1 = false;
 				break;
 			}
 		}
 		system("cls");
-	}while(repite1);
-	
+	}while(repite1);	
 	return 0;
 }
 
@@ -236,12 +303,14 @@ int main(int argc, char** argv)
 		bool repite = true; 
 		do {
 			system("cls");
-			gotoxy(40,4+opcionSelec);cout << "=>";
-			gotoxy(42,2); cout <<  titulo;//Imprime el tÌtulo
+			gotoxy(45,4+opcionSelec);cout << "=>";
+			gotoxy(0, 2);cout << "------------------------------------------------------------------------------------------------------------------------";
+			gotoxy(48,2); cout <<  titulo;//Imprime el t√≠tulo
 			for (int i=0; i<m; i++)
 			{
-				gotoxy(45, 5+i);cout <<  i+1 <<" "<< opciones[i];	
+				gotoxy(50, 5+i);cout <<  i+1 <<" "<< opciones[i];	
 			}
+			gotoxy(0,m+7);cout << "------------------------------------------------------------------------------------------------------------------------";
 			do
 			{
 				tecla = getch2();//captura tecla seleccionada por el usuario en ascii
