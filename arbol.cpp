@@ -45,8 +45,9 @@ struct Nodo
 Nodo *crearArbol(int); 
 void istNodo(int, Nodo *&);
 void mostrar(int, Nodo *);
+void AltNod(int, Nodo *, int);
 bool buscar(int, Nodo *);
-
+void elimAr(Nodo *&);
 
 Nodo *crearArbol(int x)
 {
@@ -158,7 +159,26 @@ void menuR()
 	}while(repetir);
 	
 }
-
+void AltNod(int x, Nodo *arbol, int cnt)
+{
+	if (x == arbol->valor)
+	{
+		gotoxy(45, 8); cout << "LA ALTURA DEL NODO " << x << " ES " << cnt <<endl;
+		system("pause");
+	}
+	else if(x < arbol->valor)
+	{
+		AltNod(x, arbol->izquierdo, cnt+=1);
+	}
+	else if(x > arbol->valor)
+	{ 
+		AltNod(x, arbol->derecho, cnt+=1);
+	}
+}
+void elimAr(Nodo *&arbol)
+{	
+	arbol = NULL;
+}
 int main(int argc, char** argv)
 {
 	setlocale(LC_ALL,"Spanish");
@@ -170,6 +190,7 @@ int main(int argc, char** argv)
 	system("cls");
 	bool repite1 = true; 
 	int cnt = 0;
+	int nodos=0, ul=0;
 	do
 	{
 		int opcion;		
@@ -192,6 +213,8 @@ int main(int argc, char** argv)
 					gotoxy(45, 1);cout << "ÁRBOL VACÍO  ";
 					gotoxy(40, 3);cout << "DAME EL NÚMERO ENTERO =>  "; 
 					cin >> numero;
+					nodos +=1;
+					ul=numero;
 					istNodo(numero, Arbol);
 					system("cls");
 					gotoxy(40, 3);cout << "<= VALOR INSERTADO CORRECTAMENTE =>  " << endl << endl ; 
@@ -206,12 +229,18 @@ int main(int argc, char** argv)
 				{
 					gotoxy(45, 1);cout << "ÁRBOL VACÍO  ";
 				}
-				gotoxy(40, 3);cout << "DAME EL NÚMERO ENTERO =>  "; 
-				cin >> numero;
-				istNodo(numero, Arbol);
-				system("cls");
-				gotoxy(40, 3);cout << "<= VALOR INSERTADO CORRECTAMENTE =>  " << endl << endl ; 
-				system("pause");
+				else
+				{
+					gotoxy(40, 3);cout << "DAME EL NÚMERO ENTERO =>  "; 
+					cin >> numero;
+					nodos +=1;
+					ul=numero;
+					istNodo(numero, Arbol);
+					system("cls");
+					gotoxy(40, 3);cout << "<= VALOR INSERTADO CORRECTAMENTE =>  " << endl << endl ; 
+					system("pause");
+				}
+				
 				break;
 			}
 			case 3:
@@ -248,11 +277,11 @@ int main(int argc, char** argv)
 					cin >> numero;
 					if(buscar(numero, Arbol) == true)
 					{
-						gotoxy(35, 5);cout << " <= EL NÚMERO " << numero << " EXISTE EN EL ÁRBOL =>  "; 
+						gotoxy(35, 5);cout << " <= EL NÚMERO " << numero << " EXISTE EN EL ÁRBOL  =>"; 
 					}
 					else if(buscar(numero, Arbol) == false)
 					{
-						gotoxy(35, 5);cout << " <= EL NÚMERO " << numero <<  " NO EXISTE EN EL ÁRBOL =>  "; 
+						gotoxy(35, 5);cout << " <= EL NÚMERO " << numero <<  " NO EXISTE EN EL ÁRBOL =>"; 
 					}
 					cout << endl << endl; 
 					system("pause");
@@ -262,14 +291,45 @@ int main(int argc, char** argv)
 			}
 			case 5: 
 			{
+				if (Arbol == NULL)
+				{
+					gotoxy(45, 1);cout << "ÁRBOL VACÍO  "<<endl;
+					system("pause");
+				}
+				else
+				{
+					int nd=0;
+					cout << "ESCRIBE EL NODO PARA CALCULAR SU ALTURA EN EL ÁRBOL => ";
+					cin >> nd;
+					if(buscar(nd, Arbol) == true)
+					{
+						 AltNod(nd, Arbol, 1);
+					}
+					else if(buscar(nd, Arbol) == false)
+					{
+						gotoxy(35, 5);cout << " <= EL NÚMERO " << nd <<  " NO EXISTE EN EL ÁRBOL =>"; 
+						system("pause");					
+					}	
+				}				
 				break;
 			}
 			case 6:
 			{
+								
 				break;
 			}
 			case 7:
 			{
+				if (Arbol == NULL)
+				{
+					gotoxy(45, 1);cout << "ÁRBOL VACÍO  "<<endl;
+					system("pause");
+				}
+				else
+				{
+					gotoxy(35, 5);cout << "<= EL ÁRBOL TIENE " << nodos <<  " NODOS =>"<<endl<<endl;
+					system("pause");
+				}
 				break;
 			}
 			case 8:
@@ -283,6 +343,8 @@ int main(int argc, char** argv)
 			}
 			case 10:
 			{
+				elimAr(Arbol);
+				gotoxy(35, 5);cout << "<= ÁRBOL ELIMINADO CORRECTAMENTE =>" <<endl<<endl; 
 				break;
 			}
 			case 11:
