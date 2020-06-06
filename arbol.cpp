@@ -40,16 +40,21 @@ struct Nodo
 	int valor; 
 	Nodo *izquierdo; 
 	Nodo *derecho; 
+	Nodo *padre;
 }*Arbol;
 
-Nodo *crearArbol(int); 
-void istNodo(int, Nodo *&);
+Nodo *crearArbol(int, Nodo *); 
+void istNodo(int, Nodo *&, Nodo *);
 void mostrar(int, Nodo *);
 void AltNod(int, Nodo *, int);
 bool buscar(int, Nodo *);
 void elimAr(Nodo *&);
+void PreOr(Nodo *);
+void InOr(Nodo *);
+void PosOr(Nodo *);
 
-Nodo *crearArbol(int x)
+
+Nodo *crearArbol(int x, Nodo *padre)
 {
 	
 	Nodo *arbol = new Nodo(); //creamos nuevo puntero de tipo nodo
@@ -57,26 +62,27 @@ Nodo *crearArbol(int x)
 	arbol->valor=x; 
 	arbol->izquierdo=NULL;
 	arbol->derecho=NULL; 
+	arbol->padre=padre;
 	
 	return arbol;//devolvemos el nodo ya con valores
 }
 
-void istNodo(int x, Nodo *&arbol)
+void istNodo(int x, Nodo *&arbol, Nodo *padre)
 {
 	if (arbol==NULL)
 	{
-		arbol = crearArbol(x); //Si arbol está vacío se llama a crearArbol y se guarda en arbol el primero nodo
+		arbol = crearArbol(x,padre); //Si arbol está vacío se llama a crearArbol y se guarda en arbol el primero nodo
 	}
 	else 
 	{
 		int valorR = arbol->valor;//Se obtiene el valor de la raíz
 		if (x < valorR)
 		{
-			istNodo(x, arbol->izquierdo);//Si el valor dado es menor al nodo raíz se inserta a la izquierda
+			istNodo(x, arbol->izquierdo, arbol);//Si el valor dado es menor al nodo raíz se inserta a la izquierda
 		}
 		else if (x > valorR)
 		{
-			istNodo(x, arbol->derecho);//Si el valor dado es mayor al nodo raíz se inserta a la derecha
+			istNodo(x, arbol->derecho, arbol);//Si el valor dado es mayor al nodo raíz se inserta a la derecha
 		}
 		
 		
@@ -139,15 +145,47 @@ void menuR()
 		{
 			case 1:
 			{
-				
+				if (Arbol == NULL)
+				{
+					gotoxy(45, 1);cout << "ÁRBOL VACÍO  "<<endl<<endl;
+					system("pause");
+				}
+				else
+				{
+					PreOr(Arbol);
+					cout << "\n\n";
+					system("pause");
+				}
 				break;
 			}
 			case 2:
 			{
+				if (Arbol == NULL)
+				{
+					gotoxy(45, 1);cout << "ÁRBOL VACÍO  "<<endl<<endl;
+					system("pause");
+				}
+				else
+				{
+					InOr(Arbol);
+					cout << "\n\n";
+					system("pause");
+				}
 				break;
 			}
 			case 3:
 			{
+				if (Arbol == NULL)
+				{
+					gotoxy(45, 1);cout << "ÁRBOL VACÍO  "<<endl<<endl;
+					system("pause");
+				}
+				else
+				{
+					PosOr(Arbol);
+					cout << "\n\n";
+					system("pause");
+				}
 				break;
 			}
 			case 4:
@@ -179,6 +217,161 @@ void elimAr(Nodo *&arbol)
 {	
 	arbol = NULL;
 }
+
+void PreOr(Nodo *arbol)
+{
+	if(arbol == NULL)
+	{
+		return;
+	}
+	else
+	{
+		cout << arbol->valor << " -> ";
+		PreOr(arbol->izquierdo);
+		PreOr(arbol->derecho);
+	}
+}
+
+void InOr(Nodo *arbol)
+{
+	if(arbol == NULL)
+	{
+		return;
+	}
+	else
+	{
+		InOr(arbol->izquierdo);
+		cout << arbol->valor << " -> ";
+		InOr(arbol->derecho);
+	}
+}
+
+void PosOr(Nodo *arbol)
+{
+	if(arbol == NULL)
+	{
+		return;
+	}
+	else
+	{
+		PosOr(arbol->izquierdo);
+		PosOr(arbol->derecho);
+		cout << arbol->valor << "->";
+	}
+}
+
+void Elim(Nodo *arbol, int x)
+{
+	if(arbol == NULL)
+	{
+		return;
+	}
+	else if(x < arbol->valor)
+	{
+		Elim(arbol->izquierdo,x); //si el valor es menor que el nodo padre va a buscar a su izquierda
+	}
+	else if(x > arbol->valor)
+	{
+		Elim(arbol->derecho,x); //si el valor es mayor que el nodo padre va a buscar a su derecha
+	}
+	else	//cuando ya no es mayor ni menor significa que ya encontro el dato
+	{
+		ElimNod(arbol); //va a mandar la posicon en la que se encuentra actualmente
+	}
+}
+
+void ElimNod(Nodo *elNodo)
+{
+	//cuando el nodo tiene dos hijos
+	if(elNodo->izquierdo && elNodo->derecho)	//cuando el nodo tiene hijo a la derecha e izuiqerda
+	{
+		Nodo *menor = buscIzq(elNodo->derecho); //manda el valor del nodo derecho para despuesbuscar a su izquierda
+		elNodo->valor = menor->valor; //al encontrar el valor mas a la izquierda posible lo sustituye por el que queriamos eliminar
+		ElimNod(menor); 				//llama de nuevo a la funcion para eliminar
+	}
+	//cuando solo tiene un hijo
+	else if(elNodo->izquierdo)	//si es hijo izquierdo
+	{
+		reemp(elNodo, elNodo->izquierdo);
+		borrar(elNodo);
+	}
+	else if(elNodo->derecho)	//si el hijo esta a la derecha
+	{
+		reemp(elNodo, elNodo->derecho);
+		borrar(elNodo);
+	}
+	//cuando no tiene hijos (nodo hoja)
+	else
+	{
+		reemp(elNodo,NULL);	//va a remplazar el valor por nulo para poder eliminarlo correctamente
+		borrar(elNodo);
+	}
+}
+
+//funcion par aencontrar el nodo más a la izquierda posible
+Nodo *buscIzq(Nodo *arbol)
+{
+	if(arbol == NULL)
+	{
+		return NULL;
+	}
+	if(arbol->izquierdo)	//si tiene hijo izquierdo
+	{
+		return buscIzq(arbol->izquierdo);//busca de nuevo por la izquierda
+	}
+	else	//si ya no tiene hijos a la izquierda
+	{
+		return arbol;//regresa el valor en el que se quedó
+	}
+}
+
+void reemp(Nodo *arbol, Nodo *nuevo)
+{
+	if(arbol->padre) //si tene padre, le asignamos a un nuevo hijo
+	{
+		if(arbol->valor == arbol->padre->izquierdo->valor)
+		{
+			arbol->padre->izquierdo = nuevo;
+		}
+		else if(arbol->valor == arbol->padre->derecho->valor)
+		{
+			arbol->padre->derecho = nuevo;
+		}
+	}
+	if(nuevo) //se le asigna un nuevo padre
+	{
+		nuevo->padre = arbol->padre;
+	}
+}
+
+void borrar(Nodo *valor)
+{
+	//primero le quitamos los hijos para poder eliminarlo
+	valor->izquierdo = NULL;
+	valor->derecho = NULL;
+	
+	delete valor;
+	
+}
+
+int altura(Nodo *arbol)
+{
+    int AltIzq, AltDer;
+
+    if(arbol==NULL)
+        return 0;
+    else
+    {
+        AltIzq = altura(arbol->izquierdo);
+        AltDer = altura(arbol->derecho);
+
+        if(AltIzq>AltDer)
+            return AltIzq+1;
+        else
+            return AltDer+1;
+    }
+}
+
 int main(int argc, char** argv)
 {
 	setlocale(LC_ALL,"Spanish");
@@ -190,7 +383,7 @@ int main(int argc, char** argv)
 	system("cls");
 	bool repite1 = true; 
 	int cnt = 0;
-	int nodos=0, ul=0;
+	int nodos=0, ul=0, x;
 	do
 	{
 		int opcion;		
@@ -215,7 +408,7 @@ int main(int argc, char** argv)
 					cin >> numero;
 					nodos +=1;
 					ul=numero;
-					istNodo(numero, Arbol);
+					istNodo(numero, Arbol, NULL);
 					system("cls");
 					gotoxy(40, 3);cout << "<= VALOR INSERTADO CORRECTAMENTE =>  " << endl << endl ; 
 					system("pause");
@@ -228,6 +421,13 @@ int main(int argc, char** argv)
 				if (Arbol == NULL)
 				{
 					gotoxy(45, 1);cout << "ÁRBOL VACÍO  ";
+					gotoxy(40, 3);cout << "DAME UN NÚMERO ENTERO =>  "; 
+					cin >> numero;
+					nodos +=1;
+					ul=numero;
+					istNodo(numero, Arbol,NULL);
+					gotoxy(40, 3);cout << "<= VALOR INSERTADO CORRECTAMENTE =>  " << endl << endl ; 
+					system("pause");
 				}
 				else
 				{
@@ -235,7 +435,7 @@ int main(int argc, char** argv)
 					cin >> numero;
 					nodos +=1;
 					ul=numero;
-					istNodo(numero, Arbol);
+					istNodo(numero, Arbol,NULL);
 					system("cls");
 					gotoxy(40, 3);cout << "<= VALOR INSERTADO CORRECTAMENTE =>  " << endl << endl ; 
 					system("pause");
@@ -315,7 +515,10 @@ int main(int argc, char** argv)
 			}
 			case 6:
 			{
-								
+				int h;
+				h=altura(Arbol);
+				gotoxy(45, 8); cout << "LA ALTURA DEL ÁRBOL ES " << h <<endl;
+				system("pause");				
 				break;
 			}
 			case 7:
@@ -339,12 +542,25 @@ int main(int argc, char** argv)
 			}
 			case 9:
 			{
+				if(Arbol == NULL)
+				{
+					gotoxy(45, 1);cout << "ÁRBOL VACÍO  "<<endl;
+					system("pause");
+				}
+				else
+				{
+					cout<<"¿Qué número desea eliminar?"<<endl<<"=>";
+					cin>>x;
+					Elim(Arbol,x);
+					gotoxy(35, 5);cout << "<= ÁRBOL ELIMINADO CORRECTAMENTE =>" <<endl<<endl;
+					system("pause");
+				}
 				break;
 			}
 			case 10:
 			{
 				elimAr(Arbol);
-				gotoxy(35, 5);cout << "<= ÁRBOL ELIMINADO CORRECTAMENTE =>" <<endl<<endl; 
+				gotoxy(35, 5);cout << "<= NODO ELIMINADO CORRECTAMENTE =>" <<endl<<endl; 
 				break;
 			}
 			case 11:
